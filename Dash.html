@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Absensi FIK - Advanced</title>
+  <link rel="stylesheet" href="Tampilan.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gray-950 text-gray-100">
+
+  <div class="container mx-auto px-4 py-8 max-w-5xl">
+
+  <header class="text-center mb-10 relative">
+    <img src="https://if.upnjatim.ac.id/wp-content/uploads/2024/08/logo-web-if.png" alt="Logo IF" class="absolute top-0 left-0 w-48 h-auto object-contain logo-float glow pulse">
+    <h1 class="text-4xl font-bold text-cyan-400">Absensi Perkuliahan FIK</h1>
+    <p class="text-lg text-gray-400 mt-2">Fakultas Ilmu Komputer Upn Veteran Jatim</p>
+    <p id="current-date" class="text-sm text-gray-500"></p>
+  </header>
+
+    <!-- Form Absen -->
+    <section class="glass rounded-2xl p-8 mb-10">
+      <h2 class="text-2xl font-semibold text-cyan-400 mb-6">Absen Sekarang</h2>
+
+      <form id="absenForm" class="space-y-6">
+        <div class="max-w-2xl mx-auto space-y-6">
+          <div class="text-center">
+            <label for="nama" class="block text-sm font-medium text-gray-300 mb-2">Nama Lengkap</label>
+            <input type="text" id="nama" required class="input-field mx-auto" style="max-width: 500px;">
+          </div>
+
+          <div class="text-center">
+            <label for="npm" class="block text-sm font-medium text-gray-300 mb-2">NPM (10 digit)</label>
+            <input type="text" id="npm" required pattern="\d{10}" maxlength="10" class="input-field mx-auto" style="max-width: 500px;">
+          </div>
+
+          <div class="text-center">
+            <label for="prodi" class="block text-sm font-medium text-gray-300 mb-2">Program Studi</label>
+            <select id="prodi" required class="input-field mx-auto" aria-label="Pilih Program Studi" style="max-width: 500px;">
+              <option value="" disabled>Pilih Prodi</option>
+              <option value="Informatika">Informatika</option>
+              <option value="Sistem Informasi">Sistem Informasi</option>
+              <option value="Teknik Komputer">Magister Komputer</option>
+              <option value="Ilmu Data">Sains Data</option>
+              <option value="Teknologi Informasi">Bisnis Digital</option>
+            </select>
+          </div>
+
+          <div class="text-center">
+            <label for="lokasi" class="block text-sm font-medium text-gray-300 mb-2">Lokasi Absen</label>
+            <input type="text" id="lokasi" required class="input-field mx-auto" style="max-width: 500px;">
+          </div>
+        </div>
+
+        <!-- Webcam Section -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2"><i class="fas fa-video mr-2"></i>Ambil Foto Wajah (untuk verifikasi)</label>
+          <div class="glass rounded-lg p-4">
+            <div class="flex flex-col items-center space-y-4">
+              <div class="relative">
+                <video id="video" width="320" height="240" autoplay playsinline class="bg-black rounded-lg border-2 border-cyan-600 shadow-lg"></video>
+                <div id="cameraPlaceholder" class="absolute inset-0 flex items-center justify-center bg-gray-800 rounded-lg border-2 border-gray-600">
+                  <div class="text-center text-gray-400">
+                    <i class="fas fa-camera text-4xl mb-2"></i>
+                    <p class="text-sm">Klik "Mulai Kamera" untuk mengaktifkan</p>
+                  </div>
+                </div>
+              </div>
+              <div class="flex space-x-4">
+                <button type="button" id="startCamera" class="btn-secondary"><i class="fas fa-play mr-2"></i>Mulai Kamera</button>
+                <button type="button" id="capture" class="btn-primary" disabled><i class="fas fa-camera-retro mr-2"></i>Ambil Foto</button>
+              </div>
+              <div id="previewContainer" class="hidden">
+                <p class="text-sm text-gray-300 mb-2">Preview Foto:</p>
+                <img id="preview" class="rounded-lg border-2 border-cyan-500 shadow-md max-w-xs" alt="Preview foto absensi" />
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="foto" /> <!-- simpan base64 foto -->
+          <canvas id="canvas" width="320" height="240" class="hidden"></canvas>
+        </div>
+
+        <!-- Google Maps Trafik (Embed) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2"><i class="fas fa-map-marked-alt mr-2"></i>Trafik Sekitar Lokasi (Google Maps Live)</label>
+          <div class="glass rounded-lg p-2">
+            <iframe id="mapsEmbed" width="100%" height="300" style="border-radius: 8px;" allowfullscreen="" loading="lazy" class="rounded-lg"></iframe>
+          </div>
+          <p class="text-xs text-gray-400 mt-2">Peta akan diperbarui berdasarkan lokasi yang dimasukkan</p>
+        </div>
+
+        <button type="submit" class="btn-submit w-full">Submit Absen</button>
+      </form>
+    </section>
+
+    <!-- List Absensi -->
+    <section class="glass rounded-2xl p-8">
+      <h2 class="text-2xl font-semibold text-cyan-400 mb-6">Daftar Absensi</h2>
+      <div id="absensiList" class="space-y-4"></div>
+      <p id="emptyMessage" class="text-center text-gray-500 mt-6">Belum ada absen hari ini.</p>
+    </section>
+
+  </div>
+
+  <script src="logic.js"></script>
+</body>
+</html>
